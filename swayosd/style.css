@@ -1,0 +1,23 @@
+window {
+  background-color: #000000;
+  border: 2px solid #7f7f7f;
+  border-radius: 0px;
+}
+
+progressbar {
+  background-color: #7f7f7f;
+}
+
+trough {
+  background-color: #000000;
+}
+
+slider {
+  background-color: #ffffff;
+}
+
+label {
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 11pt;
+}

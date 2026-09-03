@@ -1,0 +1,41 @@
+# Global settings
+font=monospace 11
+background-color=#000000
+text-color=#ffffff
+border-color=#7f7f7f
+border-size=2
+border-radius=0
+
+# Layout & Positioning
+max-history=5
+layer=overlay
+anchor=top-right
+width=300
+height=100
+margin=10
+padding=10
+
+[urgency=low]
+border-color=#7f7f7f
+default-timeout=5000
+
+[urgency=normal]
+border-color=#ffffff
+default-timeout=8000
+
+[urgency=high]
+border-color=#ffffff
+background-color=#ffffff
+text-color=#000000
+default-timeout=0
+
+
+
+
+
+
+
+
+
+
+
