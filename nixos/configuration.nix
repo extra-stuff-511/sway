@@ -10,9 +10,6 @@
   nix.gc.automatic  = true;
   nix.gc.dates  = "03:00";
 
-  # VM Guest
-  #services.spice-vdagentd.enable = true;
-  #services.xserver.videoDrivers = [ "modesetting" ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -43,10 +40,11 @@
 
 
 
-  # Networking
+  # Networking + Bluetooth
   networking.hostName = "CrescentLibrary";
   networking.networkmanager.enable = true;
-
+  services.openssh.enable = true;
+  hardware.bluetooth.enable = true;
 
 
   # Timezone
@@ -61,8 +59,8 @@
 
 
   # X11
-  #services.xserver.enable = true;
-  #services.xserver.excludePackages = [ pkgs.xterm ];
+  # services.xserver.enable = true;
+  # services.xserver.excludePackages = [ pkgs.xterm ];
 
 
 
@@ -94,35 +92,29 @@
   };
 
 
-
   # Virtualisation
-  virtualisation.libvirtd.enable = true;
-  boot.kernelModules = [ "kvm-amd" ];
-
+  # virtualisation.libvirtd.enable = true;
+  # boot.kernelModules = [ "kvm-amd" ];
 
 
   # Packages
   programs.fish.enable = true;
   nixpkgs.config.allowUnfree = true;
-  programs.steam.enable = true;
-  services.syncthing.enable = true;
+  # programs.steam.enable = true;
+  # services.syncthing.enable = true;
 
   environment.systemPackages = with pkgs; [
     git
-    openssh
     curl
-    wget
     fastfetch
     neovim
     firefox-esr
-    timeshift
   ];
 
 
 
   # Desktop Environment
   hardware.graphics.enable = true;
-  security.polkit.enable = true;
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -130,35 +122,23 @@
     extraPackages = with pkgs; [
       foot
       fuzzel
-      mako
-      swaylock
-      swayidle
       swaybg
-      grim
-      slurp
-      wl-clipboard
+      swaylock
       brightnessctl
+      playerctl
       waybar
-      swayosd
-      cliphist
-      libnotify
       bluetui
-      lf
-      imv
-      zathura
-      moc
-      swappy
+      cliphist
+      wl-clipboard
+      mako
     ];
   };
 
+  environment.sessionVariables = {
+    SWAY_UNSUPPORTED_GPU = "1";
+  };
 
-
-  # Services
-  services.openssh.enable = true;
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
-
-
+  # OS Version
   system.stateVersion = "26.05";
 
 }
