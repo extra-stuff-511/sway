@@ -1,24 +1,56 @@
+  GNU nano 9.2                                                /home/adeline/.config/waybar/style.css                                                          
 * {
   font-family: monospace;
   font-size: 12px;
   min-height: 0;
 }
 
+
 window#waybar {
-  background: #111111;
-  color: #eeeeee;
-}
-
-#workspaces button {
-  padding: 0 5px;
-  color: #777777;
-  background: transparent;
-}
-
-#workspaces button.focused {
+  background: #000000;
   color: #ffffff;
   border: 1px solid #ffffff;
 }
+
+
+#workspaces button {
+  padding: 0 8px;
+  margin: 0;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 0;
+}
+
+
+#workspaces button:hover,
+#workspaces button.active,
+#workspaces button.focused {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+
+#window:hover,
+#tray:hover,
+#network:hover,
+#bluetooth:hover,
+#wireplumber:hover,
+#backlight:hover,
+#battery:hover,
+#clock:hover,
+#mpris:hover,
+#custom-notifications:hover,
+#custom-clipboard:hover,
+#custom-launcher:hover,
+#custom-power:hover,
+#custom-date:hover {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
 
 #window,
 #tray,
@@ -35,5 +67,7 @@ window#waybar {
 #custom-power,
 #custom-date {
   padding: 0 8px;
-  color: #eeeeee;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  background: #000000;
 }
