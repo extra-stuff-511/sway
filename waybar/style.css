@@ -1,0 +1,39 @@
+* {
+  font-family: monospace;
+  font-size: 12px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: #111111;
+  color: #eeeeee;
+}
+
+#workspaces button {
+  padding: 0 5px;
+  color: #777777;
+  background: transparent;
+}
+
+#workspaces button.focused {
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+#window,
+#tray,
+#network,
+#bluetooth,
+#wireplumber,
+#backlight,
+#battery,
+#clock,
+#mpris,
+#custom-notifications,
+#custom-clipboard,
+#custom-launcher,
+#custom-power,
+#custom-date {
+  padding: 0 8px;
+  color: #eeeeee;
+}
