@@ -1,6 +1,6 @@
 * {
   font-family: monospace;
-  font-size: 12px;
+  font-size: 14px;
   min-height: 0;
 }
 
@@ -9,6 +9,7 @@ window#waybar {
   background: #000000;
   color: #ffffff;
   border: 1px solid #ffffff;
+   min-height: 30px;
 }
 
 
@@ -65,7 +66,7 @@ window#waybar {
 #custom-launcher,
 #custom-power,
 #custom-date {
-  padding: 0 8px;
+  padding: 4 8px;
   color: #ffffff;
   border: 1px solid #ffffff;
   background: #000000;
