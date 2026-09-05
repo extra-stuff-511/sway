@@ -31,7 +31,7 @@ bindsym $mod+A exec $menu
 
 
 # Screen Lock
-set $lock swaylock
+set $lock swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff
 bindsym $mod+l exec $lock
 
 
@@ -109,3 +109,14 @@ default_floating_border pixel 3
 
 gaps inner 2
 gaps outer 2
+
+
+# Window borders (client.<class> <border> <background> <text> <indicator> <child_border>)
+client.focused           #ffffff   #000000   #ffffff   #ffffff   #ffffff
+client.unfocused         #ffffff   #000000   #ffffff   #ffffff   #ffffff
+client.focused_inactive  #ffffff   #000000   #ffffff   #ffffff   #ffffff
+client.urgent           #000000   #ffffff   #000000    #ffffff    #ffffff
+
+
+# Font
+font pango:monospace 10
