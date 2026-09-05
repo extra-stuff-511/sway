@@ -104,11 +104,11 @@ input type:touchpad {
 
 
 # Window Decor Defaults
-default_border pixel 3
-default_floating_border pixel 3
+default_border pixel 1
+default_floating_border pixel 1
 
-gaps inner 2
-gaps outer 2
+gaps inner 5
+gaps outer 5
 
 
 # Window borders (client.<class> <border> <background> <text> <indicator> <child_border>)
