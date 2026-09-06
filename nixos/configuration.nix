@@ -13,6 +13,7 @@
     automatic = true;
     dates = [ "03:30" ];
   };
+  nix.settings.experimental-features = [ "nix-command" ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -109,6 +110,7 @@
   environment.systemPackages = with pkgs; [
     git
     curl
+    htop
     fastfetch
     neovim
     firefox-esr
