@@ -4,7 +4,26 @@
   imports =
     [
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
+
+
+  # Home Manager
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
+    users.adeline = { pkgs, ... }: {
+      imports = [
+        ./firefox.nix
+      ];
+      home.stateVersion = "26.05";
+
+      home.packages = with pkgs; [
+      ];
+    };
+  };
+
 
   # Nix Services
   nix.gc.automatic  = true;
@@ -30,8 +49,6 @@
   boot.kernelParams = [ "nvidia-drm.modeset=1" ];
 
 
-
-
   # Battery Charge Limit
   systemd.services.battery-charge-limit = {
     description = "Set battery charge limit";
@@ -41,7 +58,6 @@
       ExecStart = "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT1/charge_control_end_threshold'";
     };
   };
-
 
 
   # Networking + Bluetooth
@@ -61,11 +77,9 @@
   # };
 
 
-
   # X11
   # services.xserver.enable = true;
   # services.xserver.excludePackages = [ pkgs.xterm ];
-
 
 
   # Sound
@@ -79,10 +93,8 @@
   };
 
 
-
   # Touchpad
   services.libinput.enable = true;
-
 
 
   # Users
@@ -110,16 +122,15 @@
   environment.systemPackages = with pkgs; [
     git
     curl
-    htop
     fastfetch
+    htop
     neovim
-    firefox-esr
   ];
-
 
 
   # Desktop Environment
   hardware.graphics.enable = true;
+  services.displayManager.ly.enable = true;
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -143,7 +154,7 @@
     SWAY_UNSUPPORTED_GPU = "1";
   };
 
-
+  
   # System Services
   services.power-profiles-daemon.enable = true;
 
