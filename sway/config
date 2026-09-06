@@ -2,11 +2,15 @@
 # Startup Services
 
 ## Bar
-exec = waybar
-exec_always --no-startup-id pkill waybar; waybar &
+bar {
+    swaybar_command waybar
+}
 
-#Notification Daemon
+## Notification Daemon
 exec mako
+
+## Background
+exec swaybg -i /home/adeline/Downloads/wallhaven-7p3mm3_1920x1080.png
 
 ## Clipboard Daemon
 exec wl-paste --type text --watch cliphist store
@@ -108,15 +112,14 @@ default_border pixel 1
 default_floating_border pixel 1
 
 gaps inner 5
-gaps outer 5
+gaps outer 0
 
 
 # Window borders (client.<class> <border> <background> <text> <indicator> <child_border>)
 client.focused           #ffffff   #000000   #ffffff   #ffffff   #ffffff
-client.unfocused         #ffffff   #000000   #ffffff   #ffffff   #ffffff
-client.focused_inactive  #ffffff   #000000   #ffffff   #ffffff   #ffffff
-client.urgent           #000000   #ffffff   #000000    #ffffff    #ffffff
-
+client.unfocused         #000000   #000000   #000000   #000000   #000000
+client.focused_inactive  #000000   #000000   #000000   #000000   #000000
+client.urgent            #ffffff   #000000   #ffffff   #ffffff   #ffffff
 
 # Font
 font pango:monospace 10
