@@ -16,7 +16,6 @@
   "modules-center": [
     "mpris",
     "clock",
-    "custom/date",
     "custom/launcher"
   ],
 
@@ -55,19 +54,6 @@
 
 
   // ==========================================================
-  // APPLICATION LAUNCHER
-  // ==========================================================
-
-  "custom/launcher": {
-    "format": "Apps",
-
-    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || fuzzel --no-exit-on-keyboard-focus-loss",
-
-    "tooltip": false
-  },
-
-
-  // ==========================================================
   // MEDIA
   // ==========================================================
 
@@ -77,22 +63,15 @@
     "format-stopped": "Media: Stopped",
 
     "max-length": 45,
-
     "ellipsis": "…",
 
     "tooltip": false,
 
-    // --------------------------------------------------------
-    // LEFT CLICK → PLAY / PAUSE
-    // --------------------------------------------------------
-
+    // Left click → play / pause
     "on-click": "playerctl play-pause",
 
-    // --------------------------------------------------------
-    // RIGHT CLICK → MEDIA MENU
-    // --------------------------------------------------------
-
-    "on-click-right": "status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac"
+    // Right click → media menu
+    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac; }"
   },
 
 
@@ -101,20 +80,19 @@
   // ==========================================================
 
   "clock": {
-    "format": "{:%H:%M}",
-
+    "format": "{:%H:%M  %d-%m %a}",
     "tooltip": false
   },
 
 
   // ==========================================================
-  // DATE
+  // APPLICATION LAUNCHER
   // ==========================================================
 
-  "custom/date": {
-    "exec": "date +'%d-%m %a'",
+  "custom/launcher": {
+    "format": "Apps",
 
-    "interval": 60,
+    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || fuzzel --no-exit-on-keyboard-focus-loss",
 
     "tooltip": false
   },
@@ -167,8 +145,6 @@
     "format": "Vol: {volume}%",
     "format-muted": "Vol: muted",
 
-    "scroll-step": 1,
-
     "tooltip": false,
 
     // Left click → mute / unmute
@@ -187,8 +163,6 @@
   "backlight": {
     "format": "Bri: {percent}%",
 
-    "scroll-step": 1,
-
     "tooltip": false,
 
     // Scroll → brightness ±1%
@@ -198,44 +172,44 @@
 
 
   // ==========================================================
-  // CLIPBOARD
-  // ==========================================================
-
-  "custom/clipboard": {
-    "format": "Clip: {}",
-
-    "exec": "cliphist list | wc -l",
-
-    "interval": 2,
-
-    "tooltip": false,
-
-    // Left click → clipboard history
-    "on-click": "cliphist list | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | cliphist decode | wl-copy",
-
-    // Right click → wipe clipboard
-    "on-click-right": "cliphist wipe && wl-copy -c"
-  },
-
-
-  // ==========================================================
   // NOTIFICATIONS
   // ==========================================================
 
   "custom/notifications": {
-    "format": "Notif: {}",
+    "return-type": "json",
 
-    "exec": "makoctl history | wc -l",
+    "exec": "count=$(makoctl history 2>/dev/null | wc -l); printf '{\"text\":\"Notif: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
 
     "interval": 2,
 
     "tooltip": false,
 
     // Left click → notification history
-    "on-click": "makoctl history | fuzzel --dmenu --no-exit-on-keyboard-focus-loss",
+    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || makoctl history | fuzzel --dmenu --no-exit-on-keyboard-focus-loss",
 
     // Right click → dismiss all
     "on-click-right": "makoctl dismiss --all"
+  },
+
+
+  // ==========================================================
+  // CLIPBOARD
+  // ==========================================================
+
+  "custom/clipboard": {
+    "return-type": "json",
+
+    "exec": "count=$(cliphist list 2>/dev/null | wc -l); printf '{\"text\":\"Clip: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
+
+    "interval": 2,
+
+    "tooltip": false,
+
+    // Left click → clipboard history
+    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || cliphist list | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | cliphist decode | wl-copy",
+
+    // Right click → wipe clipboard
+    "on-click-right": "cliphist wipe && wl-copy -c"
   },
 
 
@@ -251,7 +225,7 @@
     "tooltip": false,
 
     // Right click → power profile menu
-    "on-click-right": "profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac"
+    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac; }"
   },
 
 
@@ -268,7 +242,7 @@
     "on-click": "swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff",
 
     // Right click → power menu
-    "on-click-right": "choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac"
+    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac; }"
   },
 
 
