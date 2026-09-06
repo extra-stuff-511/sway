@@ -5,6 +5,10 @@
 }
 
 
+/* ==========================================================
+   WAYBAR
+   ========================================================== */
+
 window#waybar {
   background: #000000;
   color: #ffffff;
@@ -12,8 +16,12 @@ window#waybar {
 }
 
 
+/* ==========================================================
+   WORKSPACES
+   ========================================================== */
+
 #workspaces button {
-  padding: 5 5px;
+  padding: 5px;
   margin: 0;
   background: #000000;
   color: #ffffff;
@@ -27,31 +35,14 @@ window#waybar {
 #workspaces button.focused {
   background: #ffffff;
   color: #000000;
-  padding: 5px 5px;
+  padding: 5px;
   border: 1px solid #000000;
 }
 
 
-#window:hover,
-#tray:hover,
-#network:hover,
-#bluetooth:hover,
-#wireplumber:hover,
-#backlight:hover,
-#battery:hover,
-#clock:hover,
-#mpris:hover,
-#custom-notifications:hover,
-#custom-clipboard:hover,
-#custom-launcher:hover,
-#custom-power:hover,
-#custom-date:hover {
-  background: #ffffff;
-  color: #000000;
-  padding: 5 8px;
-  border: 1px solid #000000;
-}
-
+/* ==========================================================
+   ALL MODULES — DEFAULT
+   ========================================================== */
 
 #window,
 #tray,
@@ -65,10 +56,136 @@ window#waybar {
 #custom-notifications,
 #custom-clipboard,
 #custom-launcher,
-#custom-power,
-#custom-date {
-  padding: 5 8px;
+#custom-power {
+  padding: 5px 8px;
   color: #ffffff;
-  border: 1px solid #ffffff;
   background: #000000;
+  border: 1px solid #ffffff;
+}
+
+
+/* ==========================================================
+   HOVER — INVERT
+   ========================================================== */
+
+#window:hover,
+#tray:hover,
+#network:hover,
+#bluetooth:hover,
+#wireplumber:hover,
+#backlight:hover,
+#battery:hover,
+#clock:hover,
+#mpris:hover,
+#custom-notifications:hover,
+#custom-clipboard:hover,
+#custom-launcher:hover,
+#custom-power:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ==========================================================
+   ACTIVE STATES — INVERT
+   ========================================================== */
+
+
+/* ----------------------------------------------------------
+   MEDIA
+   ---------------------------------------------------------- */
+
+#mpris.playing {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   NOTIFICATIONS
+   ---------------------------------------------------------- */
+
+#custom-notifications.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   CLIPBOARD
+   ---------------------------------------------------------- */
+
+#custom-clipboard.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   NETWORK
+   ---------------------------------------------------------- */
+
+#network.wifi,
+#network.ethernet {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   BLUETOOTH
+   ---------------------------------------------------------- */
+
+#bluetooth.connected {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   VOLUME
+   ---------------------------------------------------------- */
+
+/* Normal → white */
+#wireplumber {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+/* Muted → black */
+#wireplumber.muted {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+
+/* ----------------------------------------------------------
+   BRIGHTNESS
+   ---------------------------------------------------------- */
+
+/* Always white */
+#backlight {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+
+/* ----------------------------------------------------------
+   BATTERY
+   ---------------------------------------------------------- */
+
+/* Charging → white */
+#battery.charging {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
 }
