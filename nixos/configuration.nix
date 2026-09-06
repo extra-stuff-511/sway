@@ -9,12 +9,15 @@
   # Nix Services
   nix.gc.automatic  = true;
   nix.gc.dates  = "03:00";
-
+  nix.optimise = {
+    automatic = true;
+    dates = [ "03:30" ];
+  };
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  boot.loader.systemd-boot.configurationLimit = 10;
 
 
   # Nvidia
@@ -137,6 +140,11 @@
   environment.sessionVariables = {
     SWAY_UNSUPPORTED_GPU = "1";
   };
+
+
+  # System Services
+  services.power-profiles-daemon.enable = true;
+
 
   # OS Version
   system.stateVersion = "26.05";
