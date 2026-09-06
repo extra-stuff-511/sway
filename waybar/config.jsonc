@@ -1,20 +1,25 @@
 {
   "layer": "top",
   "position": "top",
+
   "margin-left": 5,
   "margin-right": 5,
   "margin-top": 5,
+
   "height": 15,
+
   "modules-left": [
     "sway/workspaces",
     "sway/window"
   ],
+
   "modules-center": [
     "mpris",
     "clock",
     "custom/date",
     "custom/launcher"
   ],
+
   "modules-right": [
     "tray",
     "custom/notifications",
@@ -28,30 +33,9 @@
   ],
 
 
-  "custom/launcher": {
-    "format": "Apps",
-    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || fuzzel --no-exit-on-keyboard-focus-loss",
-    "tooltip": false
-  },
-
-
-  "custom/clipboard": {
-    "format": "Clip: {}",
-    "exec": "cliphist list | wc -l",
-    "interval": 2,
-    "on-click": "pidof fuzzel && pkill fuzzel || cliphist list | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | cliphist decode | wl-copy",
-    "on-click-right": "cliphist wipe && wl-copy -c",
-    "tooltip": false
-  },
-
-
-  "custom/notifications": {
-    "format": "Notif",
-    "on-click": "pidof fuzzel && pkill fuzzel || makoctl history | fuzzel --dmenu --no-exit-on-keyboard-focus-loss",
-    "on-click-right": "makoctl dismiss --all",
-    "tooltip": false
-  },
-
+  // ==========================================================
+  // WORKSPACES
+  // ==========================================================
 
   "sway/workspaces": {
     "disable-scroll": false,
@@ -60,87 +44,239 @@
   },
 
 
+  // ==========================================================
+  // CURRENT WINDOW
+  // ==========================================================
+
   "sway/window": {
     "max-length": 50,
     "format": "{}"
   },
 
 
-  "tray": {
-    "spacing": 10
-  },
+  // ==========================================================
+  // APPLICATION LAUNCHER
+  // ==========================================================
 
+  "custom/launcher": {
+    "format": "Apps",
 
-  "network": {
-    "format-wifi": "Net: connected",
-    "format-disconnected": "net: disconnected",
-    "format-disabled": "net: off",
-    "tooltip": false,
-    "on-click": "nmcli radio wifi $([ $(nmcli radio wifi) = 'enabled' ] && echo 'off' || echo 'on')",
-    "on-click-right": "pgrep -x nmtui && pkill -x nmtui || foot -e nmtui",
+    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || fuzzel --no-exit-on-keyboard-focus-loss",
+
     "tooltip": false
   },
 
 
-  "bluetooth": {
-    "format": "Blt: {status}",
-    "format-connected": "bt: connected",
-    "format-disabled": "bt: off",
-    "on-click": "bluetoothctl power $(bluetoothctl show | grep -q 'Powered: yes' && echo off || echo on)",
-    "on-click-right": "pgrep -x bluetui && pkill -x bluetui || foot -e bluetui",
-    "tooltip": false
-  },
-
+  // ==========================================================
+  // MEDIA
+  // ==========================================================
 
   "mpris": {
-    "format": "Media: Playing",
-    "format-paused": "Media: Paused",
-    "max-length": 35,
-    "on-click": "pidof fuzzel && pkill fuzzel || { media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); status=$(playerctl status 2>/dev/null); [ \"$status\" = \"Playing\" ] && pp=\"⏸ Pause\" || pp=\"▶ Play\"; choice=$(echo -e \"$media\\n$pp\\n⏭ Next\\n⏮ Previous\" | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; *) [ -n \"$choice\" ] && true ;; esac }",
-    "on-click-right": "playerctl play-pause",
-    "tooltip": false
+    "format": "Media: ▶ {artist} - {title}",
+    "format-paused": "Media: ⏸ {artist} - {title}",
+    "format-stopped": "Media: Stopped",
+
+    "max-length": 45,
+
+    "ellipsis": "…",
+
+    "tooltip": false,
+
+    // --------------------------------------------------------
+    // LEFT CLICK → PLAY / PAUSE
+    // --------------------------------------------------------
+
+    "on-click": "playerctl play-pause",
+
+    // --------------------------------------------------------
+    // RIGHT CLICK → MEDIA MENU
+    // --------------------------------------------------------
+
+    "on-click-right": "status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac"
   },
 
 
-  "wireplumber": {
-    "format": "Vol: {volume}%",
-    "format-muted": "vol: muted",
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-    "scroll-step": 1,
-    "tooltip": false
-  },
-
-
-  "backlight": {
-    "format": "Bri: {percent}%",
-    "scroll-step": 1,
-    "tooltip": false
-  },
-
-
-  "battery": {
-    "format": "Bat: {capacity}%",
-    "on-click": "pidof fuzzel && pkill fuzzel || { profile=$(powerprofilesctl get); choice=$(echo -e 'Performance\\nBalanced\\nPower Saver' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac; }",
-    "tooltip": false
-  },
-
-
-  "custom/power": {
-    "format": "Pwr",
-    "on-click": "pidof fuzzel && pkill fuzzel || echo -e 'lock\\nlogout\\nreboot\\nshutdown' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | xargs -I {} sh -c 'case \"{}\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac'",
-    "tooltip": false
-  },
-
+  // ==========================================================
+  // CLOCK
+  // ==========================================================
 
   "clock": {
     "format": "{:%H:%M}",
+
     "tooltip": false
   },
 
 
+  // ==========================================================
+  // DATE
+  // ==========================================================
+
   "custom/date": {
     "exec": "date +'%d-%m %a'",
+
     "interval": 60,
+
     "tooltip": false
+  },
+
+
+  // ==========================================================
+  // NETWORK
+  // ==========================================================
+
+  "network": {
+    "format-wifi": "Net: {essid}",
+    "format-ethernet": "Net: connected",
+    "format-disconnected": "Net: disconnected",
+    "format-disabled": "Net: off",
+
+    "tooltip": false,
+
+    // Left click → toggle Wi-Fi
+    "on-click": "nmcli radio wifi $([ \"$(nmcli radio wifi)\" = 'enabled' ] && echo off || echo on)",
+
+    // Right click → nmtui
+    "on-click-right": "foot -e nmtui"
+  },
+
+
+  // ==========================================================
+  // BLUETOOTH
+  // ==========================================================
+
+  "bluetooth": {
+    "format": "BT: {status}",
+    "format-connected": "BT: connected",
+    "format-disabled": "BT: off",
+
+    "tooltip": false,
+
+    // Left click → toggle Bluetooth
+    "on-click": "bluetoothctl power $(bluetoothctl show | grep -q 'Powered: yes' && echo off || echo on)",
+
+    // Right click → bluetui
+    "on-click-right": "foot -e bluetui"
+  },
+
+
+  // ==========================================================
+  // VOLUME
+  // ==========================================================
+
+  "wireplumber": {
+    "format": "Vol: {volume}%",
+    "format-muted": "Vol: muted",
+
+    "scroll-step": 1,
+
+    "tooltip": false,
+
+    // Left click → mute / unmute
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+
+    // Scroll → volume ±1%
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"
+  },
+
+
+  // ==========================================================
+  // BRIGHTNESS
+  // ==========================================================
+
+  "backlight": {
+    "format": "Bri: {percent}%",
+
+    "scroll-step": 1,
+
+    "tooltip": false,
+
+    // Scroll → brightness ±1%
+    "on-scroll-up": "brightnessctl set 1%+",
+    "on-scroll-down": "brightnessctl set 1%-"
+  },
+
+
+  // ==========================================================
+  // CLIPBOARD
+  // ==========================================================
+
+  "custom/clipboard": {
+    "format": "Clip: {}",
+
+    "exec": "cliphist list | wc -l",
+
+    "interval": 2,
+
+    "tooltip": false,
+
+    // Left click → clipboard history
+    "on-click": "cliphist list | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | cliphist decode | wl-copy",
+
+    // Right click → wipe clipboard
+    "on-click-right": "cliphist wipe && wl-copy -c"
+  },
+
+
+  // ==========================================================
+  // NOTIFICATIONS
+  // ==========================================================
+
+  "custom/notifications": {
+    "format": "Notif: {}",
+
+    "exec": "makoctl history | wc -l",
+
+    "interval": 2,
+
+    "tooltip": false,
+
+    // Left click → notification history
+    "on-click": "makoctl history | fuzzel --dmenu --no-exit-on-keyboard-focus-loss",
+
+    // Right click → dismiss all
+    "on-click-right": "makoctl dismiss --all"
+  },
+
+
+  // ==========================================================
+  // BATTERY
+  // ==========================================================
+
+  "battery": {
+    "format": "Bat: {capacity}%",
+    "format-charging": "Bat: {capacity}%+",
+    "format-full": "Bat: {capacity}%",
+
+    "tooltip": false,
+
+    // Right click → power profile menu
+    "on-click-right": "profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac"
+  },
+
+
+  // ==========================================================
+  // POWER
+  // ==========================================================
+
+  "custom/power": {
+    "format": "Pwr",
+
+    "tooltip": false,
+
+    // Left click → lock
+    "on-click": "swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff",
+
+    // Right click → power menu
+    "on-click-right": "choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac"
+  },
+
+
+  // ==========================================================
+  // SYSTEM TRAY
+  // ==========================================================
+
+  "tray": {
+    "spacing": 10
   }
 }
