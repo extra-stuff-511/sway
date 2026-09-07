@@ -32,242 +32,129 @@
     "custom/power"
   ],
 
-
-  // ==========================================================
-  // WORKSPACES
-  // ==========================================================
-
   "sway/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
     "format": "{name}"
   },
 
-
-  // ==========================================================
-  // CURRENT WINDOW
-  // ==========================================================
-
   "sway/window": {
     "max-length": 50,
-    "format": "{}"
+    "format": "{}",
+    "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show window"
   },
-
-
-  // ==========================================================
-  // MEDIA
-  // ==========================================================
 
   "mpris": {
     "format": "Media: ▶ {artist} - {title}",
     "format-paused": "Media: ⏸ {artist} - {title}",
     "format-stopped": "Media: Stopped",
-
     "max-length": 45,
     "ellipsis": "…",
-
     "tooltip": false,
 
-    // Left click → play / pause
     "on-click": "playerctl play-pause",
 
-    // Right click → media menu
-    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac; }"
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | rofi -dmenu -no-custom); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac; }"
   },
-
-
-  // ==========================================================
-  // CLOCK
-  // ==========================================================
 
   "clock": {
     "format": "{:%H:%M  %d-%m %a}",
     "tooltip": false
   },
 
-
-  // ==========================================================
-  // APPLICATION LAUNCHER
-  // ==========================================================
-
   "custom/launcher": {
     "format": "Apps",
-
-    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || fuzzel --no-exit-on-keyboard-focus-loss",
-
+    "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show drun",
     "tooltip": false
   },
-
-
-  // ==========================================================
-  // NETWORK
-  // ==========================================================
 
   "network": {
     "format-wifi": "Net: {essid}",
     "format-ethernet": "Net: connected",
     "format-disconnected": "Net: disconnected",
     "format-disabled": "Net: off",
-
     "tooltip": false,
 
-    // Left click → toggle Wi-Fi
     "on-click": "nmcli radio wifi $([ \"$(nmcli radio wifi)\" = 'enabled' ] && echo off || echo on)",
-
-    // Right click → nmtui
     "on-click-right": "foot -e nmtui"
   },
-
-
-  // ==========================================================
-  // BLUETOOTH
-  // ==========================================================
 
   "bluetooth": {
     "format": "BT: {status}",
     "format-connected": "BT: connected",
     "format-disabled": "BT: off",
-
     "tooltip": false,
 
-    // Left click → toggle Bluetooth
     "on-click": "bluetoothctl power $(bluetoothctl show | grep -q 'Powered: yes' && echo off || echo on)",
-
-    // Right click → bluetui
     "on-click-right": "foot -e bluetui"
   },
-
-
-  // ==========================================================
-  // VOLUME
-  // ==========================================================
 
   "wireplumber": {
     "format": "Vol: {volume}%",
     "format-muted": "Vol: muted",
-
     "tooltip": false,
 
-    // Left click → mute / unmute
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-
-    // Scroll → volume ±1%
     "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"
   },
-
-
-  // ==========================================================
-  // MICROPHONE
-  // ==========================================================
 
   "wireplumber#mic": {
     "node-type": "Audio/Source",
     "format": "Mic: {volume}%",
     "format-muted": "Mic: muted",
-
     "tooltip": false,
 
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-
     "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
   },
 
-
-  // ==========================================================
-  // BRIGHTNESS
-  // ==========================================================
-
   "backlight": {
     "format": "Bri: {percent}%",
-
     "tooltip": false,
 
-    // Scroll → brightness ±1%
     "on-scroll-up": "brightnessctl set 1%+",
     "on-scroll-down": "brightnessctl set 1%-"
   },
 
-
-  // ==========================================================
-  // NOTIFICATIONS
-  // ==========================================================
-
   "custom/notifications": {
     "return-type": "json",
-
     "exec": "count=$(makoctl history 2>/dev/null | wc -l); printf '{\"text\":\"Notif: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
-
     "interval": 2,
-
     "tooltip": false,
 
-    // Left click → notification history
-    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || makoctl history | fuzzel --dmenu --no-exit-on-keyboard-focus-loss",
-
-    // Right click → dismiss all
+    "on-click": "pgrep -x rofi && pkill -x rofi || makoctl history | rofi -dmenu -no-custom",
     "on-click-right": "makoctl dismiss --all"
   },
 
-
-  // ==========================================================
-  // CLIPBOARD
-  // ==========================================================
-
   "custom/clipboard": {
     "return-type": "json",
-
     "exec": "count=$(cliphist list 2>/dev/null | wc -l); printf '{\"text\":\"Clip: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
-
     "interval": 2,
-
     "tooltip": false,
 
-    // Left click → clipboard history
-    "on-click": "pgrep -x fuzzel && pkill -x fuzzel || cliphist list | fuzzel --dmenu --no-exit-on-keyboard-focus-loss | cliphist decode | wl-copy",
-
-    // Right click → wipe clipboard
+    "on-click": "pgrep -x rofi && pkill -x rofi || cliphist list | rofi -dmenu -no-custom | cliphist decode | wl-copy",
     "on-click-right": "cliphist wipe && wl-copy -c"
   },
-
-
-  // ==========================================================
-  // BATTERY
-  // ==========================================================
 
   "battery": {
     "format": "Bat: {capacity}%",
     "format-charging": "Bat: {capacity}%+",
     "format-full": "Bat: {capacity}%",
-
     "tooltip": false,
 
-    // Right click → power profile menu
-    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac; }"
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | rofi -dmenu -no-custom); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac; }"
   },
-
-
-  // ==========================================================
-  // POWER
-  // ==========================================================
 
   "custom/power": {
     "format": "Pwr",
-
     "tooltip": false,
 
-    // Left click → lock
     "on-click": "swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff",
 
-    // Right click → power menu
-    "on-click-right": "pgrep -x fuzzel && pkill -x fuzzel || { choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | fuzzel --dmenu --no-exit-on-keyboard-focus-loss); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac; }"
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | rofi -dmenu -no-custom); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac; }"
   },
-
-
-  // ==========================================================
-  // SYSTEM TRAY
-  // ==========================================================
 
   "tray": {
     "spacing": 10
