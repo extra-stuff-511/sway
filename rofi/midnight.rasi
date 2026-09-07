@@ -1,0 +1,73 @@
+* {
+font: "monospace 14";
+
+bg: #000000;
+fg: #ffffff;
+gray: #888888;
+dark-gray: #666666;
+hover: #111111;
+selected: #222222;
+}
+
+window {
+width: 600px;
+background-color: @bg;
+border: 1px;
+border-color: @selected;
+padding: 20px;
+}
+
+mainbox {
+background-color: @bg;
+children: [ inputbar, listview ];
+spacing: 15px;
+}
+
+inputbar {
+background-color: @hover;
+border: 1px;
+border-color: @selected;
+padding: 8px 12px;
+children: [ prompt, entry ];
+}
+
+prompt {
+background-color: transparent;
+text-color: @dark-gray;
+}
+
+entry {
+background-color: transparent;
+text-color: @fg;
+placeholder: "Search...";
+placeholder-color: @dark-gray;
+}
+
+listview {
+background-color: @bg;
+columns: 1;
+lines: 8;
+spacing: 2px;
+scrollbar: false;
+}
+
+element {
+background-color: @bg;
+text-color: @gray;
+padding: 8px 12px;
+}
+
+element selected {
+background-color: @selected;
+text-color: @fg;
+}
+
+element-text {
+background-color: transparent;
+text-color: inherit;
+}
+
+element-icon {
+background-color: transparent;
+size: 24px;
+}
