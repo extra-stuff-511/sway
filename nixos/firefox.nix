@@ -170,6 +170,7 @@
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "browser.tabs.closeWindowWithLastTab" = false;
           "browser.preferences.moreFromMozilla" = false;
+          "browser.compactmode.show" = true;
         };
       };
 
@@ -232,6 +233,7 @@
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "browser.tabs.closeWindowWithLastTab" = false;
           "browser.preferences.moreFromMozilla" = false;
+          "browser.compactmode.show" = true;
         };
       };
     };
