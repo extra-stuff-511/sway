@@ -12,13 +12,13 @@
 
   "modules-left": [
     "sway/workspaces",
-    "sway/window"
+    "sway/window",
+    "mpris"
   ],
 
   "modules-center": [
-    "mpris",
-    "clock",
-    "custom/launcher"
+    "custom/launcher",
+    "clock"
   ],
 
   "modules-right": [
