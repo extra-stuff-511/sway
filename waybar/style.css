@@ -1,220 +1,162 @@
-* {
-  font-family: monospace;
-  font-size: 14px;
-  min-height: 0;
-}
+{
+  "layer": "top",
+  "position": "top",
 
+  "margin-left": 5,
+  "margin-right": 5,
+  "margin-top": 5,
 
-/* ==========================================================
-   WAYBAR
-   ========================================================== */
+  "height": 30,
 
-window#waybar {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-}
+  "modules-left": [
+    "sway/workspaces",
+    "sway/window",
+    "mpris"
+  ],
 
+  "modules-center": [
+    "custom/launcher",
+    "clock"
+  ],
 
-/* ==========================================================
-   WORKSPACES
-   ========================================================== */
+  "modules-right": [
+    "tray",
+    "custom/notifications",
+    "custom/clipboard",
+    "network",
+    "bluetooth",
+    "wireplumber#mic",
+    "wireplumber",
+    "backlight",
+    "battery",
+    "custom/power"
+  ],
 
-#workspaces button {
-  padding: 5px;
-  margin: 0;
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 0;
-}
+  "sway/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": true,
+    "format": "{name}"
+  },
 
+  "sway/window": {
+    "max-length": 50,
+    "format": "{}",
+    "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show window"
+  },
 
-#workspaces button:hover,
-#workspaces button.active,
-#workspaces button.focused {
-  background: #ffffff;
-  color: #000000;
-  padding: 5px;
-  border: 1px solid #000000;
-}
+  "mpris": {
+    "format": "Media: ▶ {artist} - {title}",
+    "format-paused": "Media: ⏸ {artist} - {title}",
+    "format-stopped": "Media: Stopped",
+    "max-length": 45,
+    "ellipsis": "…",
+    "tooltip": false,
 
+    "on-click": "playerctl play-pause",
 
-/* ==========================================================
-   ALL MODULES — DEFAULT
-   ========================================================== */
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { status=$(playerctl status 2>/dev/null || echo Stopped); media=$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null); [ -z \"$media\" ] && media='No media'; case \"$status\" in Playing) pp='⏸ Pause' ;; Paused) pp='▶ Play' ;; *) pp='▶ Play' ;; esac; choice=$(printf '%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n' \"$media\" \"$pp\" '⏭ Next' '⏮ Previous' '⏹ Stop' 'Close' | rofi -dmenu -no-custom); case \"$choice\" in *Pause|*Play) playerctl play-pause ;; '⏭ Next') playerctl next ;; '⏮ Previous') playerctl previous ;; '⏹ Stop') playerctl stop ;; esac; }"
+  },
 
-#window,
-#tray,
-#network,
-#bluetooth,
-#wireplumber,
-#wireplumber#mic,
-#backlight,
-#battery,
-#clock,
-#mpris,
-#custom-notifications,
-#custom-clipboard,
-#custom-launcher,
-#custom-power {
-  padding: 5px 8px;
-  color: #ffffff;
-  background: #000000;
-  border: 1px solid #ffffff;
-}
+  "clock": {
+    "format": "{:%H:%M  %d-%m %a}",
+    "tooltip": false
+  },
 
+  "custom/launcher": {
+    "format": "Apps",
+    "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show drun",
+    "tooltip": false
+  },
 
-/* ==========================================================
-   HOVER — INVERT
-   ========================================================== */
+  "network": {
+    "format-wifi": "Net: {essid}",
+    "format-ethernet": "Net: connected",
+    "format-disconnected": "Net: disconnected",
+    "format-disabled": "Net: off",
+    "tooltip": false,
 
-#window:hover,
-#tray:hover,
-#network:hover,
-#bluetooth:hover,
-#wireplumber:hover,
-#wireplumber#mic:hover,
-#backlight:hover,
-#battery:hover,
-#clock:hover,
-#mpris:hover,
-#custom-notifications:hover,
-#custom-clipboard:hover,
-#custom-launcher:hover,
-#custom-power:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+    "on-click": "nmcli radio wifi $([ \"$(nmcli radio wifi)\" = 'enabled' ] && echo off || echo on)",
+    "on-click-right": "foot -e nmtui"
+  },
 
+  "bluetooth": {
+    "format": "BT: {status}",
+    "format-connected": "BT: connected",
+    "format-disabled": "BT: off",
+    "tooltip": false,
 
-/* ==========================================================
-   ACTIVE STATES — INVERT
-   ========================================================== */
+    "on-click": "bluetoothctl power $(bluetoothctl show | grep -q 'Powered: yes' && echo off || echo on)",
+    "on-click-right": "foot -e bluetui"
+  },
 
+  "wireplumber": {
+    "format": "Vol: {volume}%",
+    "format-muted": "Vol: muted",
+    "tooltip": false,
 
-/* ----------------------------------------------------------
-   MEDIA
-   ---------------------------------------------------------- */
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"
+  },
 
-#mpris.playing {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+  "wireplumber#mic": {
+    "node-type": "Audio/Source",
+    "format": "Mic: {volume}%",
+    "format-muted": "Mic: muted",
+    "tooltip": false,
 
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
+  },
 
-/* ----------------------------------------------------------
-   NOTIFICATIONS
-   ---------------------------------------------------------- */
+  "backlight": {
+    "format": "Bri: {percent}%",
+    "tooltip": false,
 
-#custom-notifications.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+    "on-scroll-up": "brightnessctl set 1%+",
+    "on-scroll-down": "brightnessctl set 1%-"
+  },
 
+  "custom/notifications": {
+    "return-type": "json",
+    "exec": "count=$(makoctl history 2>/dev/null | wc -l); printf '{\"text\":\"Notif: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
+    "interval": 2,
+    "tooltip": false,
 
-/* ----------------------------------------------------------
-   CLIPBOARD
-   ---------------------------------------------------------- */
+    "on-click": "pgrep -x rofi && pkill -x rofi || makoctl history | rofi -dmenu -no-custom",
+    "on-click-right": "makoctl dismiss --all"
+  },
 
-#custom-clipboard.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+  "custom/clipboard": {
+    "return-type": "json",
+    "exec": "count=$(cliphist list 2>/dev/null | wc -l); printf '{\"text\":\"Clip: %s\",\"class\":\"%s\"}\\n' \"$count\" \"$([ \"$count\" -gt 0 ] && echo active || echo empty)\"",
+    "interval": 2,
+    "tooltip": false,
 
+    "on-click": "pgrep -x rofi && pkill -x rofi || cliphist list | rofi -dmenu -no-custom | cliphist decode | wl-copy",
+    "on-click-right": "cliphist wipe && wl-copy -c"
+  },
 
-/* ----------------------------------------------------------
-   NETWORK
-   ---------------------------------------------------------- */
+  "battery": {
+    "format": "Bat: {capacity}%",
+    "format-charging": "Bat: {capacity}%+",
+    "format-full": "Bat: {capacity}%",
+    "tooltip": false,
 
-#network.wifi,
-#network.ethernet {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { profile=$(powerprofilesctl get 2>/dev/null || echo balanced); choice=$(printf '%s\\n' \"Power profile: $profile\" 'Performance' 'Balanced' 'Power Saver' | rofi -dmenu -no-custom); case \"$choice\" in 'Performance') powerprofilesctl set performance ;; 'Balanced') powerprofilesctl set balanced ;; 'Power Saver') powerprofilesctl set power-saver ;; esac; }"
+  },
 
+  "custom/power": {
+    "format": "Pwr",
+    "tooltip": false,
 
-/* ----------------------------------------------------------
-   BLUETOOTH
-   ---------------------------------------------------------- */
+    "on-click": "swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff",
 
-#bluetooth.connected {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || { choice=$(printf '%s\\n' 'lock' 'logout' 'reboot' 'shutdown' | rofi -dmenu -no-custom); case \"$choice\" in lock) swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff ;; logout) swaymsg exit ;; reboot) systemctl reboot ;; shutdown) systemctl poweroff ;; esac; }"
+  },
 
-
-/* ----------------------------------------------------------
-   VOLUME
-   ---------------------------------------------------------- */
-
-/* Normal → white */
-#wireplumber {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
-
-/* Muted → black */
-#wireplumber.muted {
-  background: #000000;
-  color: #ffffff;
-  border-color: #ffffff;
-}
-
-
-/* ----------------------------------------------------------
-   MICROPHONE
-   ---------------------------------------------------------- */
-
-/* Normal → white */
-#wireplumber#mic {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
-
-/* Muted → black */
-#wireplumber#mic.muted {
-  background: #000000;
-  color: #ffffff;
-  border-color: #ffffff;
-}
-
-
-/* ----------------------------------------------------------
-   BRIGHTNESS
-   ---------------------------------------------------------- */
-
-/* Always white */
-#backlight {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
-
-
-/* ----------------------------------------------------------
-   BATTERY
-   ---------------------------------------------------------- */
-
-/* Charging → white */
-#battery.charging {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
-
-#battery.warning,
-#battery.critical {
-    background: #ffffff;
-    color: #000000;
-    border-color: #000000;
-    font-weight: bold;
+  "tray": {
+    "spacing": 10
+  }
 }
