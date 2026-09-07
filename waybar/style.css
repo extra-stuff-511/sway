@@ -189,3 +189,11 @@ window#waybar {
   color: #000000;
   border-color: #000000;
 }
+
+#battery.warning,
+#battery.critical {
+    background: #ffffff;
+    color: #000000;
+    border-color: #000000;
+    font-weight: bold;
+}
