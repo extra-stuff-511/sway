@@ -37,6 +37,11 @@ set $menu fuzzel --no-exit-on-keyboard-focus-loss
 bindsym $mod+A exec $menu
 
 
+# Browser
+bindsym $mod+b exec firefox-esr -P "Persistent"
+bindsym $mod+Shift+b exec firefox-esr -P "Ephemeral"
+
+
 # Screen Lock
 set $lock swaylock -c 000000 --ring-color ffffff --ring-ver-color ffffff --ring-wrong-color ffffff --ring-clear-color ffffff --inside-color 000000 --inside-ver-color 000000 --inside-wrong-color 000000 --inside-clear-color 000000 --key-hl-color ffffff --bs-hl-color ffffff --text-color ffffff
 bindsym $mod+l exec $lock
