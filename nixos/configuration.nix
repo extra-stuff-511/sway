@@ -137,7 +137,7 @@
 
     extraPackages = with pkgs; [
       foot
-      fuzzel
+      rofi
       swaybg
       swaylock
       brightnessctl
