@@ -49,6 +49,7 @@ window#waybar {
 #network,
 #bluetooth,
 #wireplumber,
+#wireplumber#mic,
 #backlight,
 #battery,
 #clock,
@@ -73,6 +74,7 @@ window#waybar {
 #network:hover,
 #bluetooth:hover,
 #wireplumber:hover,
+#wireplumber#mic:hover,
 #backlight:hover,
 #battery:hover,
 #clock:hover,
@@ -161,6 +163,25 @@ window#waybar {
 
 /* Muted → black */
 #wireplumber.muted {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+
+/* ----------------------------------------------------------
+   MICROPHONE
+   ---------------------------------------------------------- */
+
+/* Normal → white */
+#wireplumber#mic {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+/* Muted → black */
+#wireplumber#mic.muted {
   background: #000000;
   color: #ffffff;
   border-color: #ffffff;
