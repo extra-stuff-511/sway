@@ -10,19 +10,18 @@
 
   "modules-left": [
     "sway/workspaces",
-    "sway/window",
-    "mpris"
+    "custom/launcher",
+    "clock",
+    "custom/notifications",
+    "custom/clipboard"
   ],
 
   "modules-center": [
-    "custom/launcher",
-    "clock"
+    "mpris"
   ],
 
   "modules-right": [
     "tray",
-    "custom/notifications",
-    "custom/clipboard",
     "network",
     "bluetooth",
     "wireplumber#mic",
@@ -36,12 +35,6 @@
     "disable-scroll": false,
     "all-outputs": true,
     "format": "{name}"
-  },
-
-  "sway/window": {
-    "max-length": 50,
-    "format": "{}",
-    "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show window"
   },
 
   "mpris": {
@@ -58,13 +51,14 @@
   },
 
   "clock": {
-    "format": "{:%H:%M  %d-%m %a}",
+    "format": "{:%H:%M / %d-%m %a}",
     "tooltip": false
   },
 
   "custom/launcher": {
     "format": "Apps",
     "on-click": "pgrep -x rofi && pkill -x rofi || rofi -show drun",
+    "on-click-right": "pgrep -x rofi && pkill -x rofi || rofi -show window",
     "tooltip": false
   },
 
