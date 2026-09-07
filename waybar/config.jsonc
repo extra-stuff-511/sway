@@ -27,6 +27,7 @@
     "custom/clipboard",
     "network",
     "bluetooth",
+    "wireplumber#mic",
     "wireplumber",
     "backlight",
     "battery",
@@ -155,6 +156,24 @@
     // Scroll → volume ±1%
     "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"
+  },
+
+
+  // ==========================================================
+  // MICROPHONE
+  // ==========================================================
+
+  "wireplumber#mic": {
+    "node-type": "Audio/Source",
+    "format": "Mic: {volume}%",
+    "format-muted": "Mic: muted",
+
+    "tooltip": false,
+
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
   },
 
 
