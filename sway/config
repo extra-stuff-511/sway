@@ -8,7 +8,6 @@ set $mod Mod4
 bar {
     swaybar_command waybar
 }
-bindsym $mod+space exec pkill -SIGUSR1 waybar
 
 ## Notification Daemon
 exec mako
