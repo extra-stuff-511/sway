@@ -13,7 +13,7 @@ bar {
 exec mako
 
 ## Background
-exec swaybg -i /home/adeline/Downloads/wallhaven-7p3mm3_1920x1080.png
+exec swaybg -c #000000
 
 ## Clipboard Daemon
 exec wl-paste --type text --watch cliphist store
@@ -32,8 +32,8 @@ bindsym $mod+Return exec $term
 
 
 # Menu
-set $menu fuzzel --no-exit-on-keyboard-focus-loss
-bindsym $mod+A exec $menu
+bindsym $mod+a exec rofi -show drun
+bindsym $mod+space exec rofi -show window
 
 
 # Browser
@@ -115,8 +115,8 @@ input type:touchpad {
 
 
 # Window Decor Defaults
-default_border pixel 1
-default_floating_border pixel 1
+default_border pixel 2
+default_floating_border pixel 2
 
 gaps inner 5
 gaps outer 0
@@ -124,9 +124,9 @@ gaps outer 0
 
 # Window borders (client.<class> <border> <background> <text> <indicator> <child_border>)
 client.focused           #ffffff   #000000   #ffffff   #ffffff   #ffffff
-client.unfocused         #000000   #000000   #000000   #000000   #000000
-client.focused_inactive  #000000   #000000   #000000   #000000   #000000
-client.urgent            #ffffff   #000000   #ffffff   #ffffff   #ffffff
+client.unfocused         #000000   #000000   #666666   #000000   #000000
+client.focused_inactive  #000000   #000000   #666666   #000000   #000000
+client.urgent            #ffffff   #222222   #ffffff   #ffffff   #ffffff
 
 # Font
 font pango:monospace 10
