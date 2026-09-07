@@ -1,3 +1,6 @@
+# Mod Keybind
+set $mod Mod4
+
 
 # Startup Services
 
@@ -5,6 +8,7 @@
 bar {
     swaybar_command waybar
 }
+bindsym $mod+space exec pkill -SIGUSR1 waybar
 
 ## Notification Daemon
 exec mako
@@ -18,7 +22,6 @@ exec wl-paste --type image --watch cliphist store
 
 
 # Sway System Binds
-set $mod Mod4
 bindsym $mod+Shift+r reload
 bindsym $mod+Shift+Escape exit
 bindsym $mod+q kill
