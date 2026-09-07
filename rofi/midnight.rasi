@@ -12,8 +12,8 @@ selected: #222222;
 window {
 width: 600px;
 background-color: @bg;
-border: 1px;
-border-color: @selected;
+border: 2px;
+border-color: @fg;
 padding: 20px;
 }
 
