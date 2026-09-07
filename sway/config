@@ -13,7 +13,7 @@ bar {
 exec mako
 
 ## Background
-exec swaybg -c #000000
+exec swaybg -c #000
 
 ## Clipboard Daemon
 exec wl-paste --type text --watch cliphist store
