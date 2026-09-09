@@ -1,3 +1,4 @@
+* {
   font-family: monospace;
   font-size: 14px;
   min-height: 0;
@@ -22,16 +23,13 @@ window#waybar {
   box-shadow: none;
 }
 
+#workspaces button:hover,
 #workspaces button.active,
 #workspaces button.focused {
   color: #000;
   background: #fff;
 }
 
-#workspaces button:hover {
-  color: #fff;
-  background: #111;
-}
 
 /* Modules */
 #window,
@@ -51,12 +49,13 @@ window#waybar {
   padding: 5px 8px;
   color: #fff;
   background: transparent;
-  border-left: 2px solid #666;
-  border-right:2px solid #666;
   box-shadow: none;
 }
 
+
 /* Active states */
+#battery.charging,
+#battery.full,
 #mpris.playing,
 #custom-notifications.active,
 #custom-clipboard.active,
@@ -67,33 +66,20 @@ window#waybar {
   color: #fff;
 }
 
+
 /* Greyed-out / inactive states */
+#wireplumber.muted,
+#wireplumber#mic.muted,
 #custom-notifications.empty,
 #custom-clipboard.empty,
 #network.disconnected,
 #network.disabled,
 #bluetooth.off,
-#battery:not(.charging),
 #mpris.paused,
 #mpris.stopped {
   color: #666;
 }
 
-/* Muted */
-#wireplumber.muted,
-#wireplumber#mic.muted {
-  color: #666;
-}
-
-/* Battery */
-#battery {
-  color: #666;
-}
-
-#battery.charging,
-#battery.full {
-  color: #fff;
-}
 
 #battery.warning,
 #battery.critical {
