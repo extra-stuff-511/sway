@@ -5,84 +5,73 @@
 }
 
 window#waybar {
-  background: #000;
-  color: #fff;
-  border: 2px solid #fff;
+  background: #000000;
+  border: 1px transparent;
 }
 
-
 /* Workspaces */
+
 #workspaces button {
-  padding: 5px 8px;
-  margin: 0;
+  padding: 5px 10px;
   background: transparent;
-  color: #888;
-  border-top: 2px solid #fff;
-  border-bottom: 2px solid #fff;
+  color: #666666;
   border-radius: 0;
   box-shadow: none;
 }
 
 #workspaces button:hover,
-#workspaces button.active,
-#workspaces button.focused {
-  color: #000;
-  background: #fff;
-}
-
-
-/* Modules */
-#window,
-#tray,
-#network,
-#bluetooth,
-#wireplumber,
-#wireplumber#mic,
-#backlight,
-#battery,  
-#clock,
-#mpris,
-#custom-notifications,
-#custom-clipboard,
-#custom-launcher,
-#custom-power {
-  padding: 5px 8px;
-  color: #fff;
-  background: transparent;
+#workspaces button.focused,
+#workspaces button.active {
+  padding: 5px 10px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 0px;
   box-shadow: none;
 }
 
+/* Inactive states */
 
-/* Active states */
-#battery.charging,
 #battery.full,
-#mpris.playing,
-#custom-notifications.active,
-#custom-clipboard.active,
-#network.wifi,
-#network.ethernet,
-#bluetooth.connected,
-#battery.charging {
-  color: #fff;
-}
-
-
-/* Greyed-out / inactive states */
 #wireplumber.muted,
 #wireplumber#mic.muted,
 #custom-notifications.empty,
 #custom-clipboard.empty,
 #network.disconnected,
 #network.disabled,
+#bluetooth.disabled,
 #bluetooth.off,
 #mpris.paused,
 #mpris.stopped {
-  color: #666;
+  padding: 5px 10px;
+  color: #666666;
+  background: transparent;
+  border-radius: 0px;
+  box-shadow: none;
 }
 
+/* Active states */
 
+#custom-power,
+#custom-launcher,
+#backlight,
+#tray,
+#clock,
+#wireplumber,
+#wireplumber#mic,
+#battery.discharging,
+#battery.charging,
 #battery.warning,
-#battery.critical {
-  color: #fff;
-  font-weight: bold;
+#battery.critical,
+#mpris.playing,
+#custom-notifications.active,
+#custom-clipboard.active,
+#network.enabled,
+#network.wifi,
+#network.ethernet,
+#bluetooth.connected {
+  padding: 5px 10px;
+  color: #ffffff;
+  background: transparent;
+  border-radius: 0px;
+  box-shadow: none;
 }
