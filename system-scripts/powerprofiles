@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+case "${1:-status}" in
+    status)
+        powerprofilesctl get
+        ;;
+
+    performance)
+        powerprofilesctl set performance
+        ;;
+
+    balanced)
+        powerprofilesctl set balanced
+        ;;
+
+    power-saver)
+        powerprofilesctl set power-saver
+        ;;
+
+    set)
+        case "$2" in
+            performance|balanced|power-saver)
+                powerprofilesctl set "$2"
+                ;;
+            *)
+                printf 'Usage: %s set {performance|balanced|power-saver}\n' "$0" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+
+    toggle)
+        current=$(powerprofilesctl get)
+
+        case "$current" in
+            performance)
+                powerprofilesctl set balanced
+                ;;
+            balanced)
+                powerprofilesctl set power-saver
+                ;;
+            power-saver)
+                powerprofilesctl set balanced
+                ;;
+            *)
+                printf 'Unknown power profile: %s\n' "$current" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+
+    *)
+        printf 'Usage: %s {status|performance|balanced|power-saver|set|toggle}\n' "$0" >&2
+        exit 1
+        ;;
+esac

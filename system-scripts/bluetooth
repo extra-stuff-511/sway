@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+case "$1" in
+    status|"")
+        if [ "$(bluetoothctl show | awk '/Powered:/ {print $2}')" != "yes" ]; then
+            printf '%s\n' "Off"
+            exit 0
+        fi
+
+        device=$(bluetoothctl devices Connected 2>/dev/null |
+            sed 's/^Device [^ ]* //' |
+            head -n 1)
+
+        if [ -n "$device" ]; then
+            printf '%s\n' "$device"
+        else
+            printf '%s\n' "Disconnected"
+        fi
+        ;;
+
+    on)
+        bluetoothctl power on
+        ;;
+
+    off)
+        bluetoothctl power off
+        ;;
+
+    toggle)
+        if [ "$(bluetoothctl show | awk '/Powered:/ {print $2}')" = "yes" ]; then
+            bluetoothctl power off
+        else
+            bluetoothctl power on
+        fi
+        ;;
+
+    *)
+        printf 'Usage: %s {status|on|off|toggle}\n' "$0" >&2
+        exit 1
+        ;;
+esac

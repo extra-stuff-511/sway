@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+find_battery() {
+    for battery in /sys/class/power_supply/*; do
+        [ -f "$battery/type" ] || continue
+
+        if [ "$(cat "$battery/type")" = "Battery" ]; then
+            printf '%s\n' "$battery"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+battery=$(find_battery)
+
+if [ -z "$battery" ]; then
+    printf '%s\n' "No battery"
+    exit 1
+fi
+
+case "${1:-status}" in
+    status)
+        capacity=$(cat "$battery/capacity" 2>/dev/null)
+        status=$(cat "$battery/status" 2>/dev/null)
+
+        if [ -z "$capacity" ]; then
+            printf '%s\n' "Unknown"
+            exit 1
+        fi
+
+        printf '%s%% %s\n' "$capacity" "$status"
+        ;;
+
+    level)
+        cat "$battery/capacity"
+        ;;
+
+    state)
+        cat "$battery/status"
+        ;;
+
+    *)
+        printf 'Usage: %s {status|level|state}\n' "$0" >&2
+        exit 1
+        ;;
+esac

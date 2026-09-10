@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+case "${1:-status}" in
+    status)
+        count=$(cliphist list 2>/dev/null | wc -l)
+
+        if [ "$count" -gt 0 ]; then
+            printf '%s\n' "$count"
+        else
+            printf '%s\n' "Empty"
+        fi
+        ;;
+
+    list)
+        cliphist list
+        ;;
+
+    menu)
+        selection=$(cliphist list 2>/dev/null |
+            rofi -dmenu \
+                 -i \
+                 -p "Clipboard")
+
+        if [ -n "$selection" ]; then
+            printf '%s\n' "$selection" |
+                cliphist decode |
+                wl-copy
+        fi
+        ;;
+
+    clear)
+        cliphist wipe
+        ;;
+
+    *)
+        printf 'Usage: %s {status|list|menu|clear}\n' "$0" >&2
+        exit 1
+        ;;
+esac
