@@ -4,25 +4,8 @@
   imports =
     [
       ./hardware-configuration.nix
-      <home-manager/nixos>
+      ./firefox.nix
     ];
-
-
-  # Home Manager
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "backup";
-    users.adeline = { pkgs, ... }: {
-      imports = [
-        ./firefox.nix
-      ];
-      home.stateVersion = "26.05";
-
-      home.packages = with pkgs; [
-      ];
-    };
-  };
 
 
   # Nix Services
@@ -125,35 +108,23 @@
     fastfetch
     htop
     neovim
+    foot
+    rofi
+    brightnessctl
+    playerctl
+    waybar
+    bluetui
+    cliphist
+    wl-clipboard
+    mako
+    nnn
   ];
 
 
   # Desktop Environment
   hardware.graphics.enable = true;
   services.displayManager.ly.enable = true;
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-
-    extraPackages = with pkgs; [
-      foot
-      rofi
-      swaybg
-      swaylock
-      brightnessctl
-      playerctl
-      waybar
-      bluetui
-      cliphist
-      wl-clipboard
-      mako
-    ];
-  };
-
-  environment.sessionVariables = {
-    SWAY_UNSUPPORTED_GPU = "1";
-  };
-
+  programs.hyprland.enable = true;
   
   # System Services
   services.power-profiles-daemon.enable = true;
