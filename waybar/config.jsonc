@@ -5,18 +5,18 @@
   "margin-left": 0,
   "margin-right": 0,
   "margin-top": 0,
-  "height": 31,
+  "height": 32,
 
   "modules-left": [
     "sway/workspaces",
-    "custom/launcher",
-    "clock",
+    "mpris",
     "custom/notifications",
     "custom/clipboard"
   ],
 
   "modules-center": [
-    "mpris"
+    "custom/launcher",
+    "clock"
   ],
 
   "modules-right": [
@@ -44,7 +44,8 @@
     "ellipsis": "…",
     "tooltip": false,
     "on-click": "playerctl play-pause",
-    "on-click-right": "~/.local/bin/menu-scripts/player.sh",
+    "on-click-right": "~/.local/bin/scripts/player.sh",
+    "tooltip": false
   },
 
   "clock": {
@@ -65,7 +66,7 @@
     "format-disconnected": "Net: disconnected",
     "format-disabled": "Net: off",
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/network.sh",
+    "on-click": "~/.local/bin/scripts/network.sh",
     "on-click-right": "foot -e nmtui"
   },
 
@@ -74,7 +75,7 @@
     "format-connected": "BT: connected",
     "format-disabled": "BT: off",
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/bluetooth.sh",
+    "on-click": "~/.local/bin/scripts/bluetooth.sh",
     "on-click-right": "foot -e bluetui"
   },
 
@@ -102,18 +103,20 @@
     "on-scroll-down": "exec brightnessctl set 1%-"
   },
 
-  "custom/notifications": {
+  "custom/clipboard": {
+    "format": "Clip",
     "interval": 2,
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/notif-menu.sh",
-    "on-click-right": "makoctl dismiss --all"
+    "on-click": "~/.local/bin/scripts/clip-menu.sh",
+    "on-click-right": "cliphist wipe && wl-copy -c"
   },
 
-  "custom/clipboard": {
+  "custom/notifications": {
+    "exec": "echo Notif",
     "interval": 2,
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/clip-menu.sh",
-    "on-click-right": "cliphist wipe && wl-copy -c"
+    "on-click": "~/.local/bin/scripts/notif-menu.sh",
+    "on-click-right": "makoctl dismiss --all"
   },
 
   "battery": {
@@ -121,13 +124,13 @@
     "format-charging": "Bat: {capacity}%+",
     "format-full": "Bat: {capacity}%",
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/ppf-menu.sh"
+    "on-click": "~/.local/bin/scripts/ppf-menu.sh"
   },
 
   "custom/power": {
     "format": "Pwr",
     "tooltip": false,
-    "on-click": "~/.local/bin/menu-scripts/logout-menu.sh",
+    "on-click": "~/.local/bin/scripts/logout-menu.sh",
   },
 
   "tray": {
