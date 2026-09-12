@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if pgrep -x rofi >/dev/null; then
     pkill -x rofi
