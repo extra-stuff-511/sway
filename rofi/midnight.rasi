@@ -1,73 +1,72 @@
 * {
-font: "monospace 14";
+    bg:          #000000;
+    fg:          #aaaaaa;
+    fg-active:   #ffffff;
+    selected-bg: #ffffff;
+    selected-fg: #000000;
+    border:      #ffffff;
 
-bg: #000000;
-fg: #ffffff;
-gray: #888888;
-dark-gray: #666666;
-hover: #111111;
-selected: #222222;
+    font: "monospace  13";
+}
+
+configuration {
+    show-icons: false;
 }
 
 window {
-width: 600px;
-background-color: @bg;
-border: 2px;
-border-color: @fg;
-padding: 20px;
+    width: 500px;
+    background-color: @bg;
+    border: 2px;
+    border-color: @border;
+    border-radius: 0px;
+    padding: 15px;
 }
 
 mainbox {
-background-color: @bg;
-children: [ inputbar, listview ];
-spacing: 15px;
+    background-color: transparent;
+    children: [ inputbar, listview ];
+    spacing: 12px;
 }
 
 inputbar {
-background-color: @hover;
-border: 1px;
-border-color: @selected;
-padding: 8px 12px;
-children: [ prompt, entry ];
+    background-color: transparent;
+    children: [ prompt, entry ];
 }
 
 prompt {
-background-color: transparent;
-text-color: @dark-gray;
+    background-color: transparent;
+    text-color: @fg-active;
+    padding: 4px 8px;
 }
 
 entry {
-background-color: transparent;
-text-color: @fg;
-placeholder: "Search...";
-placeholder-color: @dark-gray;
+    background-color: transparent;
+    text-color: @fg;
+    padding: 4px 8px;
 }
 
 listview {
-background-color: @bg;
-columns: 1;
-lines: 8;
-spacing: 2px;
-scrollbar: false;
+    background-color: transparent;
+    columns: 1;
+    lines: 10;
+    spacing: 5px;
 }
 
 element {
-background-color: @bg;
-text-color: @gray;
-padding: 8px 12px;
+    background-color: transparent;
+    text-color: @fg;
+    padding: 10px 12px;
+    border: 1px;
+    border-color: transparent;
 }
 
 element selected {
-background-color: @selected;
-text-color: @fg;
+    background-color: @selected-bg;
+    text-color: @selected-fg;
+    border-color: @border;
 }
 
 element-text {
-background-color: transparent;
-text-color: inherit;
-}
-
-element-icon {
-background-color: transparent;
-size: 24px;
+    background-color: transparent;
+    text-color: inherit;
 }
