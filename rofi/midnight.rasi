@@ -10,7 +10,7 @@
 }
 
 configuration {
-    show-icons: false;
+    show-icons: true;
 }
 
 window {
