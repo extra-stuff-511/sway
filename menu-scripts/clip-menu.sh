@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+if pgrep -x rofi >/dev/null; then
+    pkill -x rofi
+    exit 0
+fi
+
 choice=$(
     {
         echo "Clear clipboard history"
         cliphist list
-    } | rofi -dmenu -p "Clipboard > "
+    } | rofi -dmenu -p "Clipboard >"
 )
 
 case "$choice" in
