@@ -27,6 +27,7 @@
     wl-clipboard
     mako
     nnn
+    autotiling
   ];
 
   # System Services
