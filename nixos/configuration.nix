@@ -53,11 +53,6 @@
   # Timezone
   time.timeZone = "Asia/Kolkata";
   i18n.defaultLocale = "en_GB.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
 
 
   # X11
@@ -101,33 +96,6 @@
   nixpkgs.config.allowUnfree = true;
   # programs.steam.enable = true;
   # services.syncthing.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    git
-    curl
-    fastfetch
-    htop
-    neovim
-    foot
-    rofi
-    brightnessctl
-    playerctl
-    waybar
-    bluetui
-    cliphist
-    wl-clipboard
-    mako
-    nnn
-  ];
-
-
-  # Desktop Environment
-  hardware.graphics.enable = true;
-  services.displayManager.ly.enable = true;
-  programs.hyprland.enable = true;
-  
-  # System Services
-  services.power-profiles-daemon.enable = true;
 
 
   # OS Version
