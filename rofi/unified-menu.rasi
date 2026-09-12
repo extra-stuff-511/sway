@@ -1,0 +1,72 @@
+* {
+    bg:          #000000;
+    fg:          #aaaaaa;
+    fg-active:   #ffffff;
+    selected-bg: #ffffff;
+    selected-fg: #000000;
+    border:      #ffffff;
+
+    font: "monospace  13";
+}
+
+configuration {
+    show-icons: false;
+}
+
+window {
+    width: 500px;
+    background-color: @bg;
+    border: 2px;
+    border-color: @border;
+    border-radius: 0px;
+    padding: 15px;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [ inputbar, listview ];
+    spacing: 12px;
+}
+
+inputbar {
+    background-color: transparent;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @fg-active;
+    padding: 4px 8px;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @fg;
+    padding: 4px 8px;
+}
+
+listview {
+    background-color: transparent;
+    columns: 1;
+    lines: 10;
+    spacing: 5px;
+}
+
+element {
+    background-color: transparent;
+    text-color: @fg;
+    padding: 10px 12px;
+    border: 1px;
+    border-color: transparent;
+}
+
+element selected {
+    background-color: @selected-bg;
+    text-color: @selected-fg;
+    border-color: @border;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+}
