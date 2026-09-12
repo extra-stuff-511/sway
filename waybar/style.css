@@ -1,77 +1,267 @@
 * {
-  font-family: monospace;
-  font-size: 14px;
-  min-height: 0;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 window#waybar {
-  background: #000000;
-  border: 1px transparent;
+    background: #000000;
+    color: #666666;
 }
 
-/* Workspaces */
+/* =========================
+ * General modules
+ * ========================= */
+
+#workspaces,
+#custom-launcher,
+#clock,
+#custom-notifications,
+#custom-clipboard,
+#mpris,
+#tray,
+#network,
+#bluetooth,
+#wireplumber,
+#backlight,
+#battery,
+#custom-power {
+    background: #000000;
+    color: #666666;
+
+    padding: 0 8px;
+    margin: 0;
+}
+
+/* =========================
+ * Workspaces
+ * ========================= */
+
+#workspaces {
+    padding: 0 4px;
+}
 
 #workspaces button {
-  padding: 5px 10px;
-  background: transparent;
-  color: #666666;
-  border-radius: 0;
-  box-shadow: none;
+    background: transparent;
+    color: #666666;
+
+    padding: 0 8px;
+    margin: 0;
+
+    border: none;
+    border-radius: 0;
 }
 
-#workspaces button:hover,
 #workspaces button.focused,
 #workspaces button.active {
-  padding: 5px 10px;
-  background: #000000;
-  color: #ffffff;
-  border-radius: 0px;
-  box-shadow: none;
+    background: transparent;
+    color: #ffffff;
 }
 
-/* Inactive states */
-
-#battery.full,
-#wireplumber.muted,
-#wireplumber#mic.muted,
-#custom-notifications.empty,
-#custom-clipboard.empty,
-#network.disconnected,
-#network.disabled,
-#bluetooth.disabled,
-#bluetooth.off,
-#mpris.paused,
-#mpris.stopped {
-  padding: 5px 10px;
-  color: #666666;
-  background: transparent;
-  border-radius: 0px;
-  box-shadow: none;
+#workspaces button.urgent {
+    background: transparent;
+    color: #ffffff;
 }
 
-/* Active states */
+/* =========================
+ * Launcher
+ * ========================= */
 
-#custom-power,
-#custom-launcher,
-#backlight,
-#tray,
-#clock,
-#wireplumber,
-#wireplumber#mic,
-#battery.discharging,
-#battery.charging,
-#battery.warning,
-#battery.critical,
-#mpris.playing,
-#custom-notifications.active,
-#custom-clipboard.active,
-#network.enabled,
-#network.wifi,
-#network.ethernet,
+#custom-launcher {
+    color: #aaaaaa;
+    padding: 0 12px;
+}
+
+/* =========================
+ * Clock
+ * ========================= */
+
+#clock {
+    color: #aaaaaa;
+    padding: 0 12px;
+}
+
+/* =========================
+ * Notifications
+ * Always grey
+ * ========================= */
+
+#custom-notifications {
+    color: #aaaaaa;
+}
+
+/* =========================
+ * Clipboard
+ * Always grey
+ * ========================= */
+
+#custom-clipboard {
+    color: #aaaaaa;
+}
+
+/* =========================
+ * Media
+ * ========================= */
+
+/* Nothing playing */
+#mpris {
+    color: #666666;
+}
+
+/* Playing */
+#mpris.playing {
+    color: #ffffff;
+}
+
+/* Paused */
+#mpris.paused {
+    color: #aaaaaa;
+}
+
+/* =========================
+ * Network
+ * ========================= */
+
+/* Disconnected / off */
+#network {
+    color: #666666;
+}
+
+/* Wi-Fi connected */
+#network.wifi {
+    color: #ffffff;
+}
+
+/* Ethernet connected */
+#network.ethernet {
+    color: #ffffff;
+}
+
+/* =========================
+ * Bluetooth
+ * ========================= */
+
+/* Off / disabled */
+#bluetooth.disabled {
+    color: #666666;
+}
+
+/* Connected */
 #bluetooth.connected {
-  padding: 5px 10px;
-  color: #ffffff;
-  background: transparent;
-  border-radius: 0px;
-  box-shadow: none;
+    color: #ffffff;
+}
+
+/* =========================
+ * Microphone
+ * ========================= */
+
+/* Muted */
+#wireplumber.microphone,
+#wireplumber.microphone.muted {
+    color: #666666;
+}
+
+/* Unmuted / active */
+#wireplumber.microphone:not(.muted) {
+    color: #ffffff;
+}
+
+/* =========================
+ * Volume
+ * ========================= */
+
+/* Muted */
+#wireplumber.muted {
+    color: #666666;
+}
+
+/* Unmuted / active */
+#wireplumber:not(.muted) {
+    color: #ffffff;
+}
+
+/* =========================
+ * Backlight
+ * Always grey
+ * ========================= */
+
+#backlight {
+    color: #aaaaaa;
+}
+
+/* =========================
+ * Battery
+ * ========================= */
+
+/* Default / inactive */
+#battery {
+    color: #666666;
+}
+
+/* Discharging */
+#battery:not(.charging):not(.plugged):not(.full) {
+    color: #ffffff;
+}
+
+/* Charging */
+#battery.charging {
+    color: #666666;
+}
+
+/* Full */
+#battery.full {
+    color: #666666;
+}
+
+/* Critical */
+#battery.critical {
+    color: #ffffff;
+}
+
+/* =========================
+ * Tray
+ * ========================= */
+
+#tray {
+    color: #666666;
+    padding: 0 8px;
+}
+
+#tray > .passive {
+    opacity: 0.5;
+}
+
+#tray > .needs-attention {
+    color: #ffffff;
+}
+
+/* =========================
+ * Power
+ * ========================= */
+
+#custom-power {
+    color: #aaaaaa;
+    padding: 0 12px;
+}
+
+/* =========================
+ * Tooltips
+ * ========================= */
+
+tooltip {
+    background: #000000;
+    color: #aaaaaa;
+
+    border: 1px solid #ffffff;
+    border-radius: 0;
+
+    padding: 8px 10px;
+}
+
+tooltip label {
+    color: #aaaaaa;
 }
