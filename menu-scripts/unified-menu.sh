@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if pgrep -x rofi >/dev/null; then
+    pkill -x rofi
+    exit
+fi
+
 ROFI="rofi -dmenu -i -no-custom"
 
 # ─────────────────────────────────────────────
@@ -74,34 +79,32 @@ volume_menu() {
 }
 
 # ─────────────────────────────────────────────
-# Volume
+# Brightness
 # ─────────────────────────────────────────────
 
-volume_menu() {
-    while true; do
-        volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null |
-            awk '{printf "%d", $2 * 100}')
+brightness_value() {
+    brightnessctl -m 2>/dev/null |
+        awk -F, '{gsub("%","",$4); print $4}'
+}
 
-        muted=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null |
-            grep -q MUTED && echo "Muted" || echo "On")
+brightness_menu() {
+    while true; do
+        current=$(brightness_value)
+        [ -z "$current" ] && current="N/A"
 
         choice=$(printf '%s\n' \
-            "Volume: $volume% ($muted)" \
-            "Mute toggle" \
+            "Brightness: $current%" \
             "Increase" \
             "Decrease" \
             "Back" |
-            $ROFI -p "Volume")
+            $ROFI -p "Brightness")
 
         case "$choice" in
-            "Mute toggle")
-                wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-                ;;
             "Increase")
-                wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+                brightnessctl set 5%+
                 ;;
             "Decrease")
-                wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+                brightnessctl set 5%-
                 ;;
             "Back"|"")
                 return
@@ -114,6 +117,11 @@ volume_menu() {
 # Mic
 # ─────────────────────────────────────────────
 
+mic_volume() {
+    wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null |
+        awk '{printf "%d", $2 * 100}'
+}
+
 mic_status() {
     if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null |
         grep -q MUTED; then
@@ -123,8 +131,36 @@ mic_status() {
     fi
 }
 
-toggle_mic() {
-    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+mic_menu() {
+    while true; do
+        volume=$(mic_volume)
+        status=$(mic_status)
+
+        [ -z "$volume" ] && volume="N/A"
+
+        choice=$(printf '%s\n' \
+            "Mic: $volume% ($status)" \
+            "Mute toggle" \
+            "Increase" \
+            "Decrease" \
+            "Back" |
+            $ROFI -p "Mic")
+
+        case "$choice" in
+            "Mute toggle")
+                wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+                ;;
+            "Increase")
+                wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+
+                ;;
+            "Decrease")
+                wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-
+                ;;
+            "Back"|"")
+                return
+                ;;
+        esac
+    done
 }
 
 # ─────────────────────────────────────────────
@@ -132,12 +168,30 @@ toggle_mic() {
 # ─────────────────────────────────────────────
 
 network_status() {
-    wifi=$(nmcli -t -f WIFI g 2>/dev/null)
-    connection=$(nmcli -t -f NAME,TYPE connection show --active 2>/dev/null |
-        awk -F: '$2 == "wifi" {print $1; exit}')
+    # Get the first actually connected device.
+    active=$(nmcli -t \
+        -f DEVICE,TYPE,STATE,CONNECTION \
+        device status 2>/dev/null |
+        awk -F: '$3 == "connected" {print; exit}')
 
-    if [ "$wifi" = "enabled" ] && [ -n "$connection" ]; then
-        echo "Connected • $connection"
+    wifi=$(nmcli -t -f WIFI g 2>/dev/null)
+
+    if [ -n "$active" ]; then
+        connection=$(echo "$active" | cut -d: -f4)
+        type=$(echo "$active" | cut -d: -f2)
+
+        case "$type" in
+            wifi)
+                echo "Connected • $connection"
+                ;;
+            ethernet)
+                echo "Connected • Ethernet"
+                ;;
+            *)
+                echo "Connected • $connection"
+                ;;
+        esac
+
     elif [ "$wifi" = "enabled" ]; then
         echo "On • Disconnected"
     else
@@ -147,21 +201,30 @@ network_status() {
 
 network_menu() {
     while true; do
+        active=$(nmcli -t \
+            -f DEVICE,TYPE,STATE,CONNECTION \
+            device status 2>/dev/null |
+            awk -F: '$3 == "connected" {print; exit}')
+
         wifi=$(nmcli -t -f WIFI g 2>/dev/null)
-        connection=$(nmcli -t -f NAME,TYPE connection show --active 2>/dev/null |
-            awk -F: '$2 == "wifi" {print $1; exit}')
 
-        [ -z "$connection" ] && connection="Disconnected"
+        if [ -n "$active" ]; then
+            device=$(echo "$active" | cut -d: -f1)
+            type=$(echo "$active" | cut -d: -f2)
+            connection=$(echo "$active" | cut -d: -f4)
 
-        if [ "$wifi" = "enabled" ]; then
-            wifi_status="On"
+            network="Connected • $connection"
         else
-            wifi_status="Off"
+            network="Disconnected"
         fi
 
+        [ "$wifi" = "enabled" ] &&
+            wifi_status="On" ||
+            wifi_status="Off"
+
         choice=$(printf '%s\n' \
+            "$network" \
             "Wi-Fi: $wifi_status" \
-            "Connection: $connection" \
             "Toggle Wi-Fi" \
             "Open nmtui" \
             "Back" |
@@ -328,6 +391,84 @@ battery_status() {
 }
 
 # ─────────────────────────────────────────────
+# Clipboard
+# ─────────────────────────────────────────────
+
+clipboard_count() {
+    cliphist list 2>/dev/null | wc -l
+}
+
+clipboard_menu() {
+    while true; do
+        count=$(clipboard_count)
+
+        choice=$(printf '%s\n' \
+            "Clipboard: $count" \
+            "Clear history" \
+            "Clipboard history" \
+            "Back" |
+            $ROFI -p "Clipboard")
+
+        case "$choice" in
+            "Clear history")
+                cliphist wipe
+                ;;
+            "Clipboard history")
+                selected=$(cliphist list 2>/dev/null |
+                    rofi -dmenu -i -p "Clipboard")
+
+                [ -n "$selected" ] &&
+                    printf '%s\n' "$selected" |
+                    cliphist decode |
+                    wl-copy
+                ;;
+            "Back"|"")
+                return
+                ;;
+        esac
+    done
+}
+
+# ─────────────────────────────────────────────
+# Notifications
+# ─────────────────────────────────────────────
+
+notification_count() {
+    # Mako does not expose a simple notification count command.
+    # makoctl list retu
+    makoctl list 2>/dev/null |
+        grep -c '^Notification' 2>/dev/null
+}
+
+notification_menu() {
+    while true; do
+        count=$(notification_count)
+
+        choice=$(printf '%s\n' \
+            "Notifications: $count" \
+            "Clear history" \
+            "Notification history" \
+            "Back" |
+            $ROFI -p "Notifications")
+
+        case "$choice" in
+            "Clear history")
+                makoctl dismiss -a
+                ;;
+            "Notification history")
+                # Mako does not provide persistent notification history.
+                # Show currently queued notifications instead.
+                makoctl list 2>/dev/null |
+                    rofi -dmenu -i -p "Notifications"
+                ;;
+            "Back"|"")
+                return
+                ;;
+        esac
+    done
+}
+
+# ─────────────────────────────────────────────
 # Main Menu
 # ─────────────────────────────────────────────
 
@@ -343,36 +484,44 @@ main_menu() {
         brightness=$(brightness_value)
         [ -z "$brightness" ] && brightness="N/A"
 
-        volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null |
-            awk '{printf "%d%%", $2 * 100}')
-
+        volume=$(volume_value)
         [ -z "$volume" ] && volume="N/A"
+
+        mic_vol=$(mic_volume)
+        [ -z "$mic_vol" ] && mic_vol="N/A"
 
         mic=$(mic_status)
         network=$(network_status)
         bluetooth=$(bluetooth_status)
         battery=$(battery_status)
 
+        clipboard=$(clipboard_count)
+        notifications=$(notification_count)
+
         choice=$(printf '%s\n' \
             "$date_time" \
-            "Media       $media" \
-            "Brightness  $brightness%" \
-            "Volume      $volume" \
-            "Mic         $mic" \
-            "Network     $network" \
-            "Bluetooth   $bluetooth" \
-            "Battery     $battery" |
+            "Media          $media" \
+            "Brightness     $brightness%" \
+            "Volume         $volume%" \
+            "Mic            $mic_vol% ($mic)" \
+            "Network        $network" \
+            "Bluetooth      $bluetooth" \
+            "Battery        $battery" \
+            "Clipboard      $clipboard" \
+            "Notifications  $notifications" |
             $ROFI -p "System")
 
         case "$choice" in
-            Media*)       media_menu ;;
-            Brightness*)  brightness_menu ;;
-            Volume*)      volume_menu ;;
-            Mic*)         toggle_mic ;;
-            Network*)     network_menu ;;
-            Bluetooth*)   bluetooth_menu ;;
-            Battery*)     power_menu ;;
-            *)            return ;;
+            Media*)          media_menu ;;
+            Brightness*)     brightness_menu ;;
+            Volume*)         volume_menu ;;
+            Mic*)            mic_menu ;;
+            Network*)        network_menu ;;
+            Bluetooth*)      bluetooth_menu ;;
+            Battery*)        power_menu ;;
+            Clipboard*)      clipboard_menu ;;
+            Notifications*) notification_menu ;;
+            *)               return ;;
         esac
     done
 }
