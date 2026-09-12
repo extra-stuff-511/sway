@@ -1,0 +1,50 @@
+/* ------------------------------------------------------------
+ * 1. Navigation toolbar
+ * ------------------------------------------------------------ */
+
+#nav-bar {
+    min-height: 32px !important;
+    height: 32px !important;
+}
+
+
+/* ------------------------------------------------------------
+ * 2. Compact toolbar controls
+ * ------------------------------------------------------------ */
+
+#nav-bar .toolbarbutton-1,
+#nav-bar .toolbarbutton-badge-stack {
+    padding-block: 2px !important;
+}
+
+
+/* ------------------------------------------------------------
+ * 3. Compact URL bar
+ * ------------------------------------------------------------ */
+
+#urlbar-container {
+    margin-block: 0 !important;
+}
+
+#urlbar {
+    min-height: 30px !important;
+}
+
+
+/* ------------------------------------------------------------
+ * 5. Bookmarks toolbar
+ * ------------------------------------------------------------ */
+
+#PersonalToolbar {
+    min-height: 24px !important;
+    max-height: 24px !important;
+}
+
+
+/* ------------------------------------------------------------
+ * 7. Fullscreen
+ * ------------------------------------------------------------ */
+
+:root[sizemode="fullscreen"] #navigator-toolbox {
+    border-top: 0 !important;
+}
